@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+   db:
+     image: mysql
+     environment:
+       MYSQL_ROOT_PASSWORD: password
+       MYSQL_DATABASE: drupal
+       MYSQL_USER: drupal
+       MYSQL_PASSWORD: drupal
+     command: --default-authentication-plugin=mysql_native_password
+     volumes:
+       - ./seed:/docker-entrypoint-initdb.d
+   phpmyadmin:
+     image: phpmyadmin/phpmyadmin
+     environment:
+       PMA_HOST: db
+       PMA_USER: drupal
+       PMA_PASSWORD: drupal
+     ports:
+       - "82:80"
+   opensocial:
+     depends_on:
+       - db
+     image: mattiashem/opensocial
+     build: .
+     ports:
+       - "8000:80"
+     volumes:
+       - .data/modules:/var/www/html/modules
+       - .data/profiles:/var/www/html/profiles
+       - .data/themes:/var/www/html/themes
+     environment:
+       DBHOST: db
+       SITENAME: drupal
+       DBPASS: drupal
+

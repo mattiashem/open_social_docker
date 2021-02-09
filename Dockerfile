@@ -1,5 +1,5 @@
 FROM drupal:8.9
-MAINTAINER devel@goalgorilla.com
+
 
 # Install packages.
 RUN apt-get update && apt-get install -y \
@@ -12,9 +12,7 @@ RUN apt-get update && apt-get install -y \
   vim && \
   apt-get clean
 
-ADD mailcatcher-msmtp.conf /etc/msmtprc
 
-RUN echo 'sendmail_path = "/usr/bin/msmtp -t"' > /usr/local/etc/php/conf.d/mail.ini
 
 ADD php.ini /usr/local/etc/php/php.ini
 
